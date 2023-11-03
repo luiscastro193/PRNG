@@ -1,15 +1,16 @@
 "use strict";
-import {setSeed, random} from './PRNG.js';
+import PRNG from './PRNG.js';
 
 const seedInput = document.querySelector("input");
 const result = document.querySelector("p");
+let generator;
 
-seedInput.oninput = () => setSeed(seedInput.value);
+seedInput.oninput = () => {generator = new PRNG(seedInput.value)};
 
 document.querySelector("form").onsubmit = async event => {
 	event.preventDefault();
-	result.textContent = await random();
+	result.textContent = await generator.random();
 };
 
 if (seedInput.value)
-	setSeed(seedInput.value);
+	generator = new PRNG(seedInput.value);
