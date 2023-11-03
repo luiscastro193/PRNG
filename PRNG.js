@@ -10,12 +10,9 @@ export default class PRNG {
 		this.seedPromise = crypto.subtle.digest("SHA-256", new TextEncoder().encode(seed));
 	}
 	
-	async updateSeed() {
-		return this.seedPromise = this.seedPromise.then(seed => crypto.subtle.digest("SHA-256", seed));
-	}
-	
 	async random() {
-		let seed = await this.updateSeed();
-		return toRandom(seed);
+		let seed = this.seedPromise;
+		this.seedPromise = this.seedPromise.then(seed => crypto.subtle.digest("SHA-256", seed));
+		return toRandom(await seed);
 	}
 }
