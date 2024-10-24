@@ -15,9 +15,9 @@ export default class PRNG {
 	
 	updateHash() {
 		this.hash = crypto.subtle.digest("SHA-256", encoder.encode(this.seed + this.counter++));
-		if (this.counter > Number.MAX_SAFE_INTEGER) {
+		if (!Number.isSafeInteger(this.counter)) {
 			this.counter = 0;
-			this.seed+= 0;
+			this.seed += 0;
 		}
 	}
 	
