@@ -1,18 +1,29 @@
 "use strict";
 const maxValue = 4294967296;
+const encoder = new TextEncoder();
 
-function toRandom(seed) {
-	return new DataView(seed).getUint32() / maxValue;
+function toRandom(hash) {
+	return new DataView(hash).getUint32() / maxValue;
 }
 
 export default class PRNG {
 	constructor(seed) {
-		this.seedPromise = crypto.subtle.digest("SHA-256", new TextEncoder().encode(seed));
+		this.seed = seed.toString();
+		this.counter = 0;
+		this.updateHash();
+	}
+	
+	updateHash() {
+		this.hash = crypto.subtle.digest("SHA-256", encoder.encode(this.seed + this.counter++));
+		if (this.counter > Number.MAX_SAFE_INTEGER) {
+			this.counter = 0;
+			this.seed+= 0;
+		}
 	}
 	
 	async random() {
-		let mySeed = this.seedPromise;
-		this.seedPromise = mySeed.then(seed => crypto.subtle.digest("SHA-256", seed));
-		return toRandom(await mySeed);
+		let myHash = this.hash;
+		this.updateHash();
+		return toRandom(await myHash);
 	}
 }
