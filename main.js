@@ -1,5 +1,5 @@
 "use strict";
-import PRNG from './fastPRNG.js';
+import PRNG from './PRNG.js';
 
 const seedInput = document.querySelector("input");
 const result = document.querySelector("p");
