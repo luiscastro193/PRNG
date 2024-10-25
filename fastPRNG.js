@@ -14,7 +14,7 @@ async function toBigInt(seed) {
 }
 
 async function initialize(seed) {
-	seed = await toBigInt(seed);
+	seed = toBigInt(seed);
 	let instance = wasm.then(module => WebAssembly.instantiate(module));
 	[seed, instance] = await Promise.all([seed, instance]);
 	instance.exports.pcg32_srandom(seed, seed);
