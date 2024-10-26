@@ -1,6 +1,6 @@
 "use strict";
 const maxValue = 4294967296;
-const wasm = fetch("pcg_prng.wasm").then(response => WebAssembly.compileStreaming(response));
+const wasm = fetch(import.meta.resolve("./pcg_prng.wasm")).then(response => WebAssembly.compileStreaming(response));
 
 async function toBigInt(seed) {
 	let hash = new TextEncoder().encode(seed);
