@@ -1,30 +1,22 @@
 "use strict";
 const maxValue = 4294967296;
-const encoder = new TextEncoder();
+const wasm = fetch("pcg_prng.wasm").then(response => WebAssembly.compileStreaming(response));
 
-function toRandom(hash) {
-	return new DataView(hash).getUint32() / maxValue;
+async function toBigInt(seed) {
+	let hash = new TextEncoder().encode(seed);
+	
+	do {
+		hash = await crypto.subtle.digest("SHA-256", hash);
+		seed = new DataView(hash).getBigUint64();
+	} while (seed == 0n);
+	
+	return seed;
 }
 
-export default class PRNG {
-	constructor(seed) {
-		this.seed = seed.toString();
-		this.counter = 0;
-		this.updateHash();
-	}
-	
-	updateHash() {
-		this.hash = crypto.subtle.digest("SHA-256", encoder.encode(this.seed + this.counter++));
-		
-		if (!Number.isSafeInteger(this.counter)) {
-			this.counter = 0;
-			this.seed += 0;
-		}
-	}
-	
-	async random() {
-		let myHash = this.hash;
-		this.updateHash();
-		return toRandom(await myHash);
-	}
+export default async function PRNG(seed) {
+	seed = toBigInt(seed);
+	let instance = wasm.then(module => WebAssembly.instantiate(module));
+	[seed, instance] = await Promise.all([seed, instance]);
+	instance.exports.pcg32_srandom(seed, seed);
+	return () => (instance.exports.pcg32_next() >>> 0) / maxValue;
 }

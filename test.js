@@ -3,14 +3,11 @@ import PRNG from './PRNG.js';
 
 const seedInput = document.querySelector("input");
 const result = document.querySelector("p");
-let random;
-
-seedInput.oninput = () => {random = PRNG(seedInput.value)};
 
 document.querySelector("form").onsubmit = async event => {
 	event.preventDefault();
-	result.textContent = (await random)();
+	let start = performance.now();
+	let random = await PRNG(seedInput.value);
+	Array.from({length: 1000000}, () => random());
+	result.textContent = performance.now() - start;
 };
-
-if (seedInput.value)
-	random = PRNG(seedInput.value);
