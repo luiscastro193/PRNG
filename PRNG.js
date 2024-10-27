@@ -3,7 +3,7 @@ async function fetchWasm(resource) {
 	if (typeof process != 'undefined' && process?.versions?.undici)
 		return new Response(await (await import('node:fs')).openAsBlob(resource), {headers: {'Content-Type': 'application/wasm'}});
 	else
-		return fetch(resource)
+		return fetch(resource);
 }
 
 const maxValue = 4294967296;
