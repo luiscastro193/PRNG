@@ -7,7 +7,7 @@ async function fetchWasm(resource) {
 }
 
 const maxValue = 4294967296;
-const wasm = fetchWasm(new URL("pcg_prng.wasm", import.meta.url)).then(response => WebAssembly.compileStreaming(response));
+const wasm = WebAssembly.compileStreaming(fetchWasm(new URL("pcg_prng.wasm", import.meta.url)));
 
 async function toBigInts(seed) {
 	seed = new DataView(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(seed)));
