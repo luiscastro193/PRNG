@@ -1,6 +1,13 @@
 "use strict";
+async function fetchWasm(resource) {
+	if (typeof process != 'undefined' && process?.versions?.undici)
+		return new Response(await (await import('node:fs')).openAsBlob(resource), {headers: {'Content-Type': 'application/wasm'}});
+	else
+		return fetch(resource)
+}
+
 const maxValue = 4294967296;
-const wasm = fetch(new URL("pcg_prng.wasm", import.meta.url)).then(response => WebAssembly.compileStreaming(response));
+const wasm = fetchWasm(new URL("pcg_prng.wasm", import.meta.url)).then(response => WebAssembly.compileStreaming(response));
 
 async function toBigInts(seed) {
 	seed = new DataView(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(seed)));
