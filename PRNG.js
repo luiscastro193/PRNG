@@ -1,7 +1,7 @@
 "use strict";
 async function fetchWasm(resource) {
 	if (typeof process != 'undefined' && process?.versions?.undici)
-		return new Response(await (await import('node:fs')).openAsBlob(resource), {headers: {'Content-Type': 'application/wasm'}});
+		return new Response(await (await import('node:fs')).openAsBlob(resource, {type: 'application/wasm'}));
 	else
 		return fetch(resource);
 }
