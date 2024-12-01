@@ -1,6 +1,6 @@
 "use strict";
-const wasmSource = "AGFzbQEAAAABCgJgAn5+AGAAAX8DAwIAAQYLAn4BQgALfgFCAAsHHgINcGNnMzJfc3JhbmRvbQAACnBjZzMyX25leHQAAQpYAh0AQgAkACABQgGGQgGEJAEQARojACAAfCQAEAEaCzgCAX4CfyMAIQAgAEKt/tXk1IX9qNgAfiMBfCQAIABCEoggAIVCG4inIQEgAEI7iKchAiABIAJ4Cw==";
-const wasm = WebAssembly.compile(Uint8Array.from(atob(wasmSource), c => c.codePointAt(0)));
+let wasm = "AGFzbQEAAAABCgJgAn5+AGAAAX8DAwIAAQYLAn4BQgALfgFCAAsHHgINcGNnMzJfc3JhbmRvbQAACnBjZzMyX25leHQAAQpYAh0AQgAkACABQgGGQgGEJAEQARojACAAfCQAEAEaCzgCAX4CfyMAIQAgAEKt/tXk1IX9qNgAfiMBfCQAIABCEoggAIVCG4inIQEgAEI7iKchAiABIAJ4Cw==";
+wasm = WebAssembly.compile(Uint8Array.from(atob(wasm), c => c.codePointAt(0)));
 const maxValue = 4294967296;
 
 async function toBigInts(seed) {
