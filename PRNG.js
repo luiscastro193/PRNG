@@ -1,7 +1,6 @@
 "use strict";
-let wasm = "AGFzbQEAAAABCgJgAn5+AGAAAX8DAwIAAQYLAn4BQgALfgFCAAsHHgINcGNnMzJfc3JhbmRvbQAACnBjZzMyX25leHQAAQpYAh0AQgAkACABQgGGQgGEJAEQARojACAAfCQAEAEaCzgCAX4CfyMAIQAgAEKt/tXk1IX9qNgAfiMBfCQAIABCEoggAIVCG4inIQEgAEI7iKchAiABIAJ4Cw";
+let wasm = "AGFzbQEAAAABDgNgAn5+AGAAAX9gAAF8AwQDAAECBgsCfgFCAAt+AUIACwcgAg1wY2czMl9zcmFuZG9tAAAMcGNnMzJfcmFuZG9tAAIKaAMdAEIAJAAgAUIBhkIBhCQBEAEaIwAgAHwkABABGgs4AgF+An8jACEAIABCrf7V5NSF/ajYAH4jAXwkACAAQhKIIACFQhuIpyEBIABCO4inIQIgASACeAsPABABuEQAAAAAAADwQaML";
 wasm = WebAssembly.compile(Uint8Array.fromBase64?.(wasm) || Uint8Array.from(atob(wasm), c => c.codePointAt(0)));
-const maxValue = 4294967296;
 
 async function toBigInts(seed) {
 	seed = new DataView(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(seed)));
@@ -13,5 +12,5 @@ export default async function PRNG(seed) {
 	let instance = wasm.then(module => WebAssembly.instantiate(module));
 	[seed, instance] = await Promise.all([seed, instance]);
 	instance.exports.pcg32_srandom(...seed);
-	return () => (instance.exports.pcg32_next() >>> 0) / maxValue;
+	return instance.exports.pcg32_random;
 }

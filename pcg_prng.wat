@@ -20,7 +20,7 @@
 		(drop (call $pcg32_next)) ;; discard next()
 	)
 
-	(func $pcg32_next (export "pcg32_next") (result i32)
+	(func $pcg32_next (result i32)
 		(local $oldstate i64)
 		(local $xorshifted i32)
 		(local $rot i32)
@@ -43,4 +43,9 @@
 		(i32.rotr (local.get $xorshifted) (local.get $rot))
 	)
 
+	(func $pcg32_random (export "pcg32_random") (result f64)
+		;; return next() / 0x100000000
+		(f64.div (f64.convert_i32_u (call $pcg32_next)) (f64.const 0x100000000))
+	)
+	
 )
