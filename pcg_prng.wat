@@ -47,5 +47,5 @@
 		;; return next() / 0x100000000
 		(f64.div (f64.convert_i32_u (call $pcg32_next)) (f64.const 0x100000000))
 	)
-	
+
 )
