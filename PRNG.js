@@ -11,7 +11,6 @@ export default async function PRNG(seed) {
 	seed = toBigInts(seed);
 	let instance = wasm.then(module => WebAssembly.instantiate(module));
 	[seed, instance] = await Promise.all([seed, instance]);
-	console.log(seed);
 	instance.exports.pcg32_srandom(...seed);
 	return instance.exports.pcg32_random;
 }
