@@ -18,11 +18,13 @@ const cephesPromise = import('https://cdn.jsdelivr.net/npm/cephes/+esm').then(as
 	return module.default;
 });
 
+const minValue = 1 / 0x100000000; // or Number.MIN_VALUE for Math.random()
+
 document.querySelector("button").onclick = async () => {
 	const cephes = await cephesPromise;
 	let start = performance.now();
 	let random = await PRNG(seedInput.value);
-	let randomNormal = () => cephes.ndtri(random() || Number.MIN_VALUE);
+	let randomNormal = () => cephes.ndtri(random() || minValue);
 	Array.from({length: n}, () => randomNormal());
 	result.textContent = performance.now() - start;
 };

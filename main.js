@@ -1,13 +1,14 @@
 "use strict";
 import PRNG from './PRNG.js';
 
+const form = document.querySelector("form");
 const seedInput = document.querySelector("input");
 const result = document.querySelector("p");
 let random;
 
 seedInput.oninput = () => {random = PRNG(seedInput.value)};
 
-document.querySelector("form").onsubmit = async event => {
+form.onsubmit = async event => {
 	event.preventDefault();
 	result.textContent = (await random)();
 };
@@ -17,8 +18,11 @@ const cephes = import('https://cdn.jsdelivr.net/npm/cephes/+esm').then(async mod
 	return module.default;
 });
 
+const minValue = 1 / 0x100000000; // or Number.MIN_VALUE for Math.random()
+
 document.querySelector("button").onclick = async () => {
-	result.textContent = (await cephes).ndtri((await random)() || Number.MIN_VALUE);
+	if (form.reportValidity())
+		result.textContent = (await cephes).ndtri((await random)() || minValue);
 }
 
 if (seedInput.value)
