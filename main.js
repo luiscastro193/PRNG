@@ -12,5 +12,14 @@ document.querySelector("form").onsubmit = async event => {
 	result.textContent = (await random)();
 };
 
+const cephes = import('https://cdn.jsdelivr.net/npm/cephes/+esm').then(async module => {
+	await module.default.compiled;
+	return module.default;
+});
+
+document.querySelector("button").onclick = async () => {
+	result.textContent = (await cephes).ndtri((await random)() || Number.MIN_VALUE);
+}
+
 if (seedInput.value)
 	random = PRNG(seedInput.value);
