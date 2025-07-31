@@ -1,11 +1,12 @@
 "use strict";
 import PRNG from './PRNG.js';
 
+const form = document.querySelector("form");
 const seedInput = document.querySelector("input");
 const result = document.querySelector("p");
 const n = 1000000;
 
-document.querySelector("form").onsubmit = async event => {
+form.onsubmit = async event => {
 	event.preventDefault();
 	let start = performance.now();
 	let random = await PRNG(seedInput.value);
