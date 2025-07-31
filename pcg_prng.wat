@@ -44,8 +44,8 @@
 	)
 
 	(func $pcg32_random (export "pcg32_random") (result f64)
-		;; return next() / 0x100000000
-		(f64.div (f64.convert_i32_u (call $pcg32_next)) (f64.const 0x100000000))
+		;; return next() * 0x1p-32
+		(f64.mul (f64.convert_i32_u (call $pcg32_next)) (f64.const 0x1p-32))
 	)
 
 )
