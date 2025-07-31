@@ -18,11 +18,17 @@ const cephes = import('https://cdn.jsdelivr.net/npm/cephes/+esm').then(async mod
 	return module.default;
 });
 
-const minValue = 1 / 0x100000000; // or Number.MIN_VALUE for Math.random()
+function toNormal(random, ndtri) {
+	return () => {
+		let uniform;
+		while ((uniform = random()) === 0);
+		return ndtri(uniform);
+	}
+}
 
 document.querySelector("button").onclick = async () => {
 	if (form.reportValidity())
-		result.textContent = (await cephes).ndtri((await random)() || minValue);
+		result.textContent = toNormal(await random, (await cephes).ndtri)();
 }
 
 if (seedInput.value)
