@@ -1,5 +1,6 @@
 "use strict";
 import PRNG from './PRNG.js';
+import {toNormal} from './distributions.js';
 
 const form = document.querySelector("form");
 const seedInput = document.querySelector("input");
@@ -13,22 +14,9 @@ form.onsubmit = async event => {
 	result.textContent = (await random)();
 };
 
-const cephes = import('https://cdn.jsdelivr.net/npm/cephes/+esm').then(async module => {
-	await module.default.compiled;
-	return module.default;
-});
-
-function toNormal(random, ndtri) {
-	return () => {
-		let uniform;
-		while ((uniform = random()) === 0);
-		return ndtri(uniform);
-	};
-}
-
 document.querySelector("button").onclick = async () => {
 	if (form.reportValidity())
-		result.textContent = toNormal(await random, (await cephes).ndtri)();
+		result.textContent = toNormal(await random)();
 }
 
 if (seedInput.value)

@@ -1,25 +1,38 @@
-"use strict";
-import PRNG from './PRNG.js';
-import cephes from 'cephes';
-
-function toNormal(random, ndtri) {
+// Marsaglia polar method
+export function toNormal(random) {
+	let spare;
+	let hasSpare = false;
+	
 	return () => {
-		let uniform;
-		while ((uniform = random()) === 0);
-		return ndtri(uniform);
+		if (hasSpare) {
+			hasSpare = false;
+			return spare;
+		}
+		
+		let u, v, s;
+
+		do {
+			u = 2 * random() - 1;
+			v = 2 * random() - 1;
+			s = u ** 2 + v ** 2;
+		} while (s >= 1 || s === 0);
+
+		s = Math.sqrt(-2 * Math.log(s) / s);
+		spare = v * s;
+		hasSpare = true;
+		return u * s;
 	};
 }
 
-function gammaMarsagliaTsang(shape, random, ndtri) {
+function gammaMarsagliaTsang(shape, random) {
 	if (shape <= 1) throw RangeError();
 	const d = shape - 1 / 3;
 	const c = 1 / Math.sqrt(9 * d);
+	const randomNormal = toNormal(random);
 	
 	return () => {
 		while (true) {
-			const uniform = random();
-			if (uniform === 0) continue;
-			const x = ndtri(uniform);
+			const x = randomNormal();
 			let v = 1 + c * x;
 			if (v <= 0) continue;
 			v = v ** 3;
@@ -31,19 +44,19 @@ function gammaMarsagliaTsang(shape, random, ndtri) {
 	};
 }
 
-function toGamma(mean, deviation, random, ndtri) {
+export function toGamma(mean, deviation, random) {
 	const shape = (mean / deviation) ** 2;
 	const scale = deviation ** 2 / mean;
-	const generator = gammaMarsagliaTsang(shape, random, ndtri);
+	const generator = gammaMarsagliaTsang(shape, random);
 	return () => scale * generator();
 }
 
-function toBeta(mean, deviation, random, ndtri) {
+export function toBeta(mean, deviation, random) {
 	const v = mean * (1 - mean) / deviation ** 2 - 1;
 	const alpha = mean * v;
 	const beta = (1 - mean) * v;
-	const alphaGenerator = gammaMarsagliaTsang(alpha, random, ndtri);
-	const betaGenerator = gammaMarsagliaTsang(beta, random, ndtri);
+	const alphaGenerator = gammaMarsagliaTsang(alpha, random);
+	const betaGenerator = gammaMarsagliaTsang(beta, random);
 	
 	return () => {
 		const x = alphaGenerator();
@@ -51,19 +64,3 @@ function toBeta(mean, deviation, random, ndtri) {
 		return x / (x + y);
 	};
 }
-
-const random = await PRNG("test");
-const n = 1000000;
-//const generator = random;
-//const generator = toNormal(random, cephes.ndtri);
-//const generator = toGamma(1, .5, random, cephes.ndtri);
-const generator = toBeta(.5, .25, random, cephes.ndtri);
-
-const start = performance.now();
-const array = Array.from({length: n}, () => generator());
-const end = performance.now();
-console.log(`Time: ${end - start}`);
-const mean = array.reduce((a, b) => a + b) / n;
-console.log(`Mean: ${mean}`);
-const deviation = Math.sqrt(array.map(x => (x - mean) ** 2).reduce((a, b) => a + b) / (n - 1));
-console.log(`Deviation: ${deviation}`);
