@@ -46,8 +46,8 @@ function toBeta(mean, deviation, random, ndtri) {
 	const betaGenerator = gammaMarsagliaTsang(beta, random, ndtri);
 	
 	return () => {
-		let x = alphaGenerator();
-		let y = betaGenerator();
+		const x = alphaGenerator();
+		const y = betaGenerator();
 		return x / (x + y);
 	};
 }
@@ -59,9 +59,9 @@ const n = 1000000;
 //const generator = toGamma(1, .5, random, cephes.ndtri);
 const generator = toBeta(.5, .25, random, cephes.ndtri);
 
-let start = performance.now();
-let array = Array.from({length: n}, () => generator());
-let end = performance.now();
+const start = performance.now();
+const array = Array.from({length: n}, () => generator());
+const end = performance.now();
 console.log(`Time: ${end - start}`);
 const mean = array.reduce((a, b) => a + b) / n;
 console.log(`Mean: ${mean}`);

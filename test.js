@@ -8,8 +8,8 @@ const n = 1000000;
 
 form.onsubmit = async event => {
 	event.preventDefault();
-	let start = performance.now();
-	let random = await PRNG(seedInput.value);
+	const start = performance.now();
+	const random = await PRNG(seedInput.value);
 	Array.from({length: n}, () => random());
 	result.textContent = performance.now() - start;
 };
@@ -30,9 +30,9 @@ function toNormal(random, ndtri) {
 document.querySelector("button").onclick = async () => {
 	if (form.reportValidity()) {
 		const cephes = await cephesPromise;
-		let start = performance.now();
-		let random = await PRNG(seedInput.value);
-		let randomNormal = toNormal(await PRNG(seedInput.value), cephes.ndtri);
+		const start = performance.now();
+		const random = await PRNG(seedInput.value);
+		const randomNormal = toNormal(await PRNG(seedInput.value), cephes.ndtri);
 		Array.from({length: n}, () => randomNormal());
 		result.textContent = performance.now() - start;
 	}
