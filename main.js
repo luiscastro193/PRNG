@@ -23,7 +23,7 @@ function toNormal(random, ndtri) {
 		let uniform;
 		while ((uniform = random()) === 0);
 		return ndtri(uniform);
-	}
+	};
 }
 
 document.querySelector("button").onclick = async () => {
