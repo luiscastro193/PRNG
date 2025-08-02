@@ -66,9 +66,9 @@ export function toBeta(mean, deviation, random) {
 }
 
 export function toLogNormal(mean, deviation, random) {
-	const logVar = Math.log(1 + (deviation / mean) ** 2);
-	const sigma = Math.sqrt(logVar);
-	const mu = Math.log(mean) - logVar / 2;
+	const variance = Math.log(1 + (deviation / mean) ** 2);
+	const mu = Math.log(mean) - variance / 2;
+	const sigma = Math.sqrt(variance);
 	const randomNormal = toNormal(random);
 	return () => Math.exp(mu + sigma * randomNormal());
 }
