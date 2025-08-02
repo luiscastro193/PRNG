@@ -6,8 +6,12 @@ const form = document.querySelector("form");
 const seedInput = document.querySelector("input");
 const result = document.querySelector("p");
 let random;
+let randomNormal;
 
-seedInput.oninput = () => {random = PRNG(seedInput.value)};
+seedInput.oninput = () => {
+	random = PRNG(seedInput.value);
+	randomNormal = random.then(toNormal);
+};
 
 form.onsubmit = async event => {
 	event.preventDefault();
@@ -16,8 +20,7 @@ form.onsubmit = async event => {
 
 document.querySelector("button").onclick = async () => {
 	if (form.reportValidity())
-		result.textContent = toNormal(await random)();
+		result.textContent = (await randomNormal)();
 }
 
-if (seedInput.value)
-	random = PRNG(seedInput.value);
+if (seedInput.value) seedInput.oninput();
