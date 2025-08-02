@@ -64,3 +64,11 @@ export function toBeta(mean, deviation, random) {
 		return x / (x + y);
 	};
 }
+
+export function toLogNormal(mean, deviation, random) {
+	const logVar = Math.log(1 + (deviation / mean) ** 2);
+	const sigma = Math.sqrt(logVar);
+	const mu = Math.log(mean) - logVar / 2;
+	const randomNormal = toNormal(random);
+	return () => Math.exp(mu + sigma * randomNormal());
+}
