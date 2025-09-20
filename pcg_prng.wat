@@ -1,4 +1,4 @@
-(module ;; compile with --enable-memory64
+(module
 
 	;; ==== PCG PRNG ===========================================
 
