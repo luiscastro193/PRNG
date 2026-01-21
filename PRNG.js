@@ -1,16 +1,22 @@
 "use strict";
-let wasm = "AGFzbQEAAAABDgNgAn5+AGAAAX9gAAF8AwQDAAECBgsCfgFCAAt+AUIACwcgAg1wY2czMl9zcmFuZG9tAAAMcGNnMzJfcmFuZG9tAAIKaAMdAEIAJAAgAUIBhkIBhCQBEAEaIwAgAHwkABABGgs4AgF+An8jACEAIABCrf7V5NSF/ajYAH4jAXwkACAAQhKIIACFQhuIpyEBIABCO4inIQIgASACeAsPABABuEQAAAAAAADwPaIL";
-wasm = WebAssembly.compile(Uint8Array.fromBase64?.(wasm) || Uint8Array.from(atob(wasm), c => c.codePointAt(0)));
+import module from './random.js';
+const randomPromise = module();
 
-async function toBigInts(seed) {
-	seed = new DataView(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(seed)));
-	return [seed.getBigUint64(), seed.getBigUint64(8)];
+async function toBigInts(mySeed) {
+	if (mySeed == null) return crypto.getRandomValues(new BigUint64Array(4));
+	return new BigUint64Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(mySeed)));
 }
 
-export default async function PRNG(seed) {
-	seed = toBigInts(seed);
-	let instance = wasm.then(module => WebAssembly.instantiate(module));
-	[seed, instance] = await Promise.all([seed, instance]);
-	instance.exports.pcg32_srandom(...seed);
-	return instance.exports.pcg32_random;
+export async function seed(mySeed) {
+	const [ints, random] = await Promise.all([toBigInts(mySeed), randomPromise]);
+	random._seed(...ints);
+}
+
+export async function random() {
+	return (await randomPromise)._next;
+}
+
+export default async function PRNG(mySeed) {
+	await seed(mySeed);
+	return random();
 }

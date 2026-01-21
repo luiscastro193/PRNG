@@ -9,7 +9,7 @@ let random;
 let randomNormal;
 
 seedInput.oninput = () => {
-	random = PRNG(seedInput.value);
+	random = PRNG(seedInput.value || null);
 	randomNormal = random.then(toNormal);
 };
 
@@ -19,8 +19,7 @@ form.onsubmit = async event => {
 };
 
 document.querySelector("button").onclick = async () => {
-	if (form.reportValidity())
-		result.textContent = (await randomNormal)();
+	result.textContent = (await randomNormal)();
 }
 
-if (seedInput.value) seedInput.oninput();
+seedInput.oninput();
