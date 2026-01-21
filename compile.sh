@@ -5,5 +5,5 @@ em++ random.cpp -Ivendor \
 	-sSTRICT=1 -sJS_MATH=1 -sEVAL_CTORS=2 \
 	--closure 1 -sMINIMAL_RUNTIME=1 -sEXPORT_KEEPALIVE=1 \
 	-sINITIAL_HEAP=0 -sMALLOC=none \
-	-sEXPORTED_FUNCTIONS=_seed,_next 	\
+	-sEXPORTED_FUNCTIONS=_seed,_next \
 	-o random.js
