@@ -6,5 +6,5 @@ em++ random.cpp -Ivendor \
 	--closure 1 -sMINIMAL_RUNTIME=1 -sEXPORT_KEEPALIVE=1 \
 	-sMALLOC=emmalloc -sINITIAL_HEAP=65536 \
 	-sALLOW_MEMORY_GROWTH=1 -sMEMORY_GROWTH_LINEAR_STEP=65536 \
-	-sEXPORTED_FUNCTIONS=_seed,_next,_destroy \
+	-sEXPORTED_FUNCTIONS=_seed,_next,_destroy,_normal,_next_normal,_destroy_normal \
 	-o random.js

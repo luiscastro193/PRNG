@@ -1,6 +1,5 @@
 "use strict";
-import PRNG from './PRNG.js';
-import {toNormal} from './distributions.js';
+import * as PRNG from './PRNG.js';
 
 const form = document.querySelector("form");
 const seedInput = document.querySelector("input");
@@ -9,8 +8,9 @@ let random;
 let randomNormal;
 
 seedInput.oninput = () => {
-	random = PRNG(seedInput.value || null);
-	randomNormal = random.then(toNormal);
+	const generator = PRNG.generator(seedInput.value || null);
+	random = generator.then(rng => PRNG.next(rng));
+	randomNormal = generator.then(rng => PRNG.normal(0, 1, rng));
 };
 
 form.onsubmit = async event => {
