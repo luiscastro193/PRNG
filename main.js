@@ -10,7 +10,7 @@ let randomNormal;
 seedInput.oninput = () => {
 	const generator = PRNG.generator(seedInput.value || null);
 	random = generator.then(rng => PRNG.next(rng));
-	randomNormal = generator.then(rng => PRNG.normal(0, 1, rng));
+	randomNormal = generator.then(rng => PRNG.distribution('normal', 0, 1, rng));
 };
 
 form.onsubmit = async event => {
