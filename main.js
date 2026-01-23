@@ -4,6 +4,7 @@ import * as PRNG from './PRNG.js';
 const form = document.querySelector("form");
 const seedInput = document.querySelector("input");
 const result = document.querySelector("p");
+const buttons = document.querySelectorAll("button");
 let random;
 let randomNormal;
 
@@ -18,8 +19,13 @@ form.onsubmit = async event => {
 	result.textContent = (await random)();
 };
 
-document.querySelector("button").onclick = async () => {
+buttons[0].onclick = async () => {
 	result.textContent = (await randomNormal)();
+}
+
+buttons[1].onclick = () => {
+	seedInput.oninput();
+	result.textContent = '';
 }
 
 seedInput.oninput();
