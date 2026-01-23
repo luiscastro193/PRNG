@@ -9,6 +9,7 @@ let random;
 let randomNormal;
 
 seedInput.oninput = () => {
+	result.textContent = '';
 	const generator = PRNG.generator(seedInput.value || null);
 	random = generator.then(rng => PRNG.next(rng));
 	randomNormal = generator.then(rng => PRNG.distribution('normal', 0, 1, rng));
@@ -23,9 +24,5 @@ buttons[0].onclick = async () => {
 	result.textContent = (await randomNormal)();
 }
 
-buttons[1].onclick = () => {
-	seedInput.oninput();
-	result.textContent = '';
-}
-
 seedInput.oninput();
+buttons[1].onclick = seedInput.oninput;
