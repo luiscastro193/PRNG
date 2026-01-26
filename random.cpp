@@ -1,19 +1,16 @@
 #include <emscripten/emscripten.h>
 #define CAPI extern "C" EMSCRIPTEN_KEEPALIVE
-#define WASM_SIMD_COMPAT_SLOW
 
-#include <boost/random/xoshiro.hpp>
+#include <xoshiro.hpp>
 #include <array>
 #include <random>
 #include <limits>
 #include <cmath>
 
-using generator = boost::random::xoshiro256pp;
+using generator = xoshiro256pp_wasm_simd;
 
-CAPI generator* seed(std::uint64_t s0, std::uint64_t s1, std::uint64_t s2, std::uint64_t s3) {
-	std::array<std::uint64_t, 4> state = {s0, s1, s2, s3};
-	auto it = state.begin();
-	return new generator(it, state.end());
+CAPI generator* seed(int64_t s0, int64_t s1, int64_t s2, int64_t s3, int64_t s4, int64_t s5, int64_t s6, int64_t s7) {
+	return new generator(s0, s1, s2, s3, s4, s5, s6, s7);
 }
 
 CAPI double next(generator* rng) {
