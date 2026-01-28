@@ -1,16 +1,16 @@
 #include <emscripten/emscripten.h>
 #define CAPI extern "C" EMSCRIPTEN_KEEPALIVE
 
-#include <xoshiro.hpp>
+#include <pcg.hpp>
 #include <array>
 #include <random>
 #include <limits>
 #include <cmath>
 
-using generator = xoshiro256pp_wasm_simd;
+using generator = pcg64_dxsm;
 
-CAPI generator* seed(int64_t s0, int64_t s1, int64_t s2, int64_t s3, int64_t s4, int64_t s5, int64_t s6, int64_t s7) {
-	return new generator(s0, s1, s2, s3, s4, s5, s6, s7);
+CAPI generator* seed(uint64_t s0, uint64_t s1, uint64_t s2, uint64_t s3) {
+	return new generator(s0, s1, s2, s3);
 }
 
 CAPI double next(generator* rng) {

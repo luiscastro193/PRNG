@@ -4,8 +4,8 @@ const randomPromise = module();
 const cleaner = new FinalizationRegistry(async ({method, memory}) => (await randomPromise)['_destroy' + method](memory));
 
 async function toBigInts(seed) {
-	if (seed == null) return crypto.getRandomValues(new BigInt64Array(8));
-	return new BigInt64Array(await crypto.subtle.digest("SHA-512", new TextEncoder().encode(seed)));
+	if (seed == null) return crypto.getRandomValues(new BigUint64Array(4));
+	return new BigUint64Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(seed)));
 }
 
 export async function generator(seed) {
