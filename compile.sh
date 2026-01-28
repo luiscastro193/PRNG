@@ -1,7 +1,7 @@
 #!/bin/bash
 em++ random.cpp -I. \
 	-Oz -flto -fno-exceptions -fno-rtti -DNDEBUG \
-	-mtail-call -msimd128 \
+	-mtail-call -msimd128 -mavx2 \
 	-sENVIRONMENT=web -sEXPORT_ES6=1 -sSINGLE_FILE=1 --no-entry \
 	-sSTRICT=1 -sJS_MATH=1 \
 	--closure 1 -sMINIMAL_RUNTIME=1 -sEXPORT_KEEPALIVE=1 \
