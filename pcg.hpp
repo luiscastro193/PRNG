@@ -15,11 +15,7 @@ public:
 	
 	pcg64_dxsm(uint64_t state_hi, uint64_t state_lo, uint64_t inc_hi, uint64_t inc_lo) noexcept:
 		state_{ (__uint128_t(state_hi) << 64) | __uint128_t(state_lo) },
-		inc_{ (__uint128_t(inc_hi) << 64) | __uint128_t(inc_lo) } {
-		inc_ = (inc_ << 1) | 1;
-		state_ += inc_;
-		(*this)();
-	}
+		inc_{ (__uint128_t(inc_hi) << 64) | __uint128_t(inc_lo | 1) } {}
 	
 	result_type operator()() noexcept {
 		constexpr uint64_t mul = 15750249268501108917ULL;
