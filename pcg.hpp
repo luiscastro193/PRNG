@@ -5,7 +5,7 @@
 class pcg64_dxsm {
 private:
 	__uint128_t state_;
-	__uint128_t inc_;
+	const __uint128_t inc_;
 
 public:
 	using result_type = uint64_t;
