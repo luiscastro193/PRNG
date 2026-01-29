@@ -79,10 +79,9 @@ CAPI void destroy_beta(beta_dist* dist) {
 using lognormal_dist = std::lognormal_distribution<double>;
 
 CAPI lognormal_dist* lognormal(double mean, double deviation) {
-	const double variance = std::log(1.0 + (deviation * deviation) / (mean * mean));
-	const double mu = std::log(mean) - .5 * variance;
-	const double sigma = std::sqrt(variance);
-	return new lognormal_dist(mu, sigma);
+	const double sigma_sq = std::log(1.0 + (deviation * deviation) / (mean * mean));
+	const double mu = std::log(mean) - .5 * sigma_sq;
+	return new lognormal_dist(mu, std::sqrt(sigma_sq));
 }
 
 CAPI double next_lognormal(lognormal_dist* dist, generator* rng) {
