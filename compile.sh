@@ -10,4 +10,8 @@ em++ random.cpp -I. \
 	-sALLOW_MEMORY_GROWTH=1 -sMEMORY_GROWTH_LINEAR_STEP=65536 \
 	-o random.js
 
-perl -pi -e 's|fetch\(|(u=>fetch(u,u.origin==location.origin?{mode:"no-cors",credentials:"include"}:void 0))(|' random.js
+perl -0777 -pi -e '
+	my $arg;
+	s|fetch\((new URL\([^)]+\))\)|$arg = $1; "request"|e;
+	$_ = qq{let request=(u=>fetch(u,u.origin==location.origin?{mode:"no-cors",credentials:"include"}:void 0))($arg);\n$_};
+' random.js
