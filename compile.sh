@@ -12,6 +12,6 @@ em++ random.cpp -I. \
 
 perl -0777 -pi -e '
 	my $arg;
-	s|fetch\((new URL\([^)]+\))\)|$arg = $1; "request"|e;
-	$_ = qq{let request=(u=>fetch(u,u.origin==location.origin?{mode:"no-cors",credentials:"include"}:void 0))($arg);\n$_};
+	s|fetch\((new URL\([^)]+\))\)|$arg = $1; "req"|e;
+	$_ = qq{let req=(u=>fetch(u,u.origin==location.origin?{mode:"no-cors",credentials:"include"}:void 0))($arg);\n$_};
 ' random.js
