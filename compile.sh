@@ -3,8 +3,7 @@ em++ random.cpp -I. \
 	-Oz -flto -fno-exceptions -fno-rtti -DNDEBUG \
 	-mtail-call -msimd128 -mavx2 \
 	-sENVIRONMENT=web -sEXPORT_ES6=1 --no-entry \
-	-sSTRICT=1 -sJS_MATH=1 \
-	--closure 1 -sEXPORT_KEEPALIVE=1 \
+	-sSTRICT=1 --closure 1 -sEXPORT_KEEPALIVE=1 \
 	-sMINIMAL_RUNTIME=1 -sMINIMAL_RUNTIME_STREAMING_WASM_INSTANTIATION=1 \
 	-sMALLOC=emmalloc -sINITIAL_HEAP=65536 \
 	-sALLOW_MEMORY_GROWTH=1 -sMEMORY_GROWTH_LINEAR_STEP=65536 \
