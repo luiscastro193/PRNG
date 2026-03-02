@@ -1,6 +1,6 @@
 #!/bin/bash
 em++ random.cpp -I. \
-	-Oz -flto -fno-exceptions -fno-rtti -DNDEBUG \
+	-Os -flto -fno-exceptions -fno-rtti -DNDEBUG \
 	-mtail-call -msimd128 -mavx2 \
 	-sENVIRONMENT=web -sEXPORT_ES6=1 --no-entry \
 	-sSTRICT=1 --closure 1 -sEXPORT_KEEPALIVE=1 \
