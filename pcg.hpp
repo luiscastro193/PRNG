@@ -1,6 +1,5 @@
 #pragma once
 #include <cstdint>
-#include <limits>
 
 class pcg64_dxsm {
 private:
@@ -10,8 +9,8 @@ private:
 public:
 	using result_type = uint64_t;
 	
-	static constexpr result_type min() noexcept { return std::numeric_limits<result_type>::min(); }
-	static constexpr result_type max() noexcept { return std::numeric_limits<result_type>::max(); }
+	static constexpr result_type min() noexcept { return 0; }
+	static constexpr result_type max() noexcept { return (result_type(1) << 53) - 1; }
 	
 	pcg64_dxsm(uint64_t state_hi, uint64_t state_lo, uint64_t inc_hi, uint64_t inc_lo) noexcept:
 		state_{ (__uint128_t(state_hi) << 64) | __uint128_t(state_lo) },
@@ -27,6 +26,6 @@ public:
 		hi *= mul;
 		hi ^= hi >> 48;
 		hi *= lo;
-		return hi;
+		return hi >> 11;
 	}
 };
